@@ -29,7 +29,7 @@ THEN I can save my initials and my score
 
 ```
 
-Link to deployed webpage: 
+Link to deployed webpage: https://negromcgee.github.io/Code-Quiz/
 
 
 Link to GitHub repository: https://github.com/negromcgee/Code-Quiz
