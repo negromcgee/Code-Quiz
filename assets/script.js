@@ -1,270 +1,208 @@
-var seconds;
-var timerSec = 75;
-var countdown = document.querySelector(".countdown");
-var userScore = 0;
-var displayTimer = 1;
-var questionsArray = [myArray[0][0], myArray[1][0], myArray[2][0], myArray[3][0], myArray[4][0]];
-var questionsArrayIndex = 0;
-var viewHighScores = document.querySelector('.anchor');
-var correctAns = document.getElementById("correctAns");
-var wrongAns = document.getElementById("wrongAns");
-var goBackButton = document.querySelector("#goBack");
-var clearStorage = document.querySelector("#clearScores");
-var info = JSON.parse(localStorage.getItem('score'));
-var position = 0;
-
-
-myArray = [
-    questOne = ["Commonly used data types DO NOT include:", "alerts", 'booleans', "strings", 'numbers'],
-    questTwo = ["The condition in an if / else statement is enclosed within ___.", "quotes", 'curly brackets', "parentheses", 'square brackets'],
-    questThree = ["Arrays in JavaScript can be used to store ___.", "numbers and strings", 'booleans', "other arrays", 'all of the above'],
-    questFour = ["String values must be enclosed within __ when being assigned to variables.", "commas", 'quotes', "curly brackets", 'parentheses'],
-    questFive = ["A very useful tool used during development and debugging for printing content to the debugger is:", "JavaScript", 'terminal/bash', "for loops", 'console.log']    
-]
-
-function startQuiz() {
-
-    questionsDiv.style.visibility = 'visible';
-
-    document.getElementById("removeElem").remove();
-
-    shuffle(questionsArray);
-  
-    chooseQuestion();
-
-    populateQuiz();
-
-    timerStart();
-}
-
-function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
-
-    while (0 !== currentIndex) {
-
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
-
-    return array;
-}
-
-function chooseQuestion() {
+var questions = [
+    {
+        title: "What does HTML stand for?",
+        choices: ["Hyper Trainer Marking Language", "Hyper Text Marketing Language", "Hyper Text Markup Language", "Hyper Text Markup Leveler"],
+        answer: "c"
+    },
+    {
+        title: "Which is the correct way to attach a stylesheet to HTML?",
+        choices:[""],
+        answer: ""
+    },
+    {
+        title: "Commonly used data types DO NOT include:",
+        choices: ["Alerts", "Booleans", "Strings", "Numbers"],
+        answer: "Alerts"
+    },
+    {
+        title: "String values must be enclosed within ____ when being assigned to variables.",
+        choices: ["Commas", "Quotes", "Curly Brackets", "Parenthesis"],
+        answer: "Quotes"
+    },
+    {
+        title: "What is the element called that can continue to execute a block of code as long as the specified condition remains TRUE?",
+        choices: ["Clone", "Loop", "Repeat", "Constant"],
+        answer: "Loop"
+    },
+    {
+        title: "What kind of statement is used to execute actions based on a trigger or condition?",
+        choices: ["RegExp or Regular Expression", "Fired Event", "Conditional Statement", "Boolean Variable"],
+        answer: "Conditional Statement"
+    },
+    {
+        title: "What is a JavaScript element that represents either TRUE or FALSE values?",
+        choices: ["Boolean", "Condition", "Event", "RegExp"],
+        answer: "Boolean"
+    },
+    {
+        title: "CSS stands for ____ Style Sheets.",
+        choices: ["Concave", "Concept", "Create", "Cascading"],
+        answer: "Cascading"
+    },
    
-    randomQuestion = questionsArray[questionsArrayIndex]; 
+];
 
-    return randomQuestion;
-};
+//DECLARE VARIABLES:
+var score = 0;
+var questionIndex = 0;
+var currentTime = document.querySelector("#currentTime");
+var timer = document.querySelector("#startTime");
+var questionsDiv = document.querySelector("#questionsDiv");
+var wrapper = document.querySelector("#wrapper");
+var secondsLeft = 100;
+var holdInterval = 0;
+var penalty = 10;
+var ulCreate = document.createElement("ul");
 
-function populateQuiz() {
+timer.addEventListener("click", function () {
+    if (holdInterval === 0) {
+        holdInterval = setInterval(function () {
+            secondsLeft--;
+            currentTime.textContent = "Time: " + secondsLeft;
 
-    if (randomQuestion == myArray[0][0] || randomQuestion == myArray[1][0] || randomQuestion == myArray[2][0] || randomQuestion == myArray[3][0] || randomQuestion == myArray[4][0]) {
-
-        $("#quesBody").text(chooseQuestion());
-        
+            if (secondsLeft <= 0) {
+                clearInterval(holdInterval);
+                allDone();
+                currentTime.textContent = "Time's up!";
+            }
+        }, 1000);
     }
+    render(questionIndex);
+});
 
-    checkAns();
-
-};
-
-function checkAns() {
-    if (randomQuestion == myArray[0][0]) {
-        for (i = 1; i < myArray[0].length; i++) {
-            $("#ans" + i).text(myArray[0][i]);
-        }
-
+function render(questionIndex) { 
+    questionsDiv.innerHTML = "";
+    ulCreate.innerHTML = "";
+    for (var i = 0; i < questions.length; i++) {
+        var userQuestion = questions[questionIndex].title;
+        var userChoices = questions[questionIndex].choices;
+        questionsDiv.textContent = userQuestion;
     }
-
-    if (randomQuestion == myArray[3][0]) {
-
-        for (i = 1; i < myArray[3].length; i++) {
-            $("#ans" + i).text(myArray[3][i]);
-        }
-
-    }
-
-    if (randomQuestion === myArray[1][0]) {
-
-        for (i = 1; i < myArray[1].length; i++) {
-            $("#ans" + i).text(myArray[1][i]);
-        }
-
-    }
-
-    if (randomQuestion == myArray[2][0]) {
-        for (i = 1; i < myArray[2].length; i++) {
-            $("#ans" + i).text(myArray[2][i]);
-        }
-      
-    }
-
-    if (randomQuestion == myArray[4][0]) {
-        for (i = 1; i < myArray[4].length; i++) {
-            $("#ans" + i).text(myArray[4][i]);
-        }       
-
-    }
-
-}
-
-function nextQuestion() {    
-
-    setTimeout(function(){
-        correctAns.innerText = '';
-    }, 1000);
-
-    setTimeout(function(){
-        wrongAns.innerText = '';
-    }, 1000);
-    
-    console.log(questionsArrayIndex);
-
-    if (questionsArrayIndex < 5) {
-        questionsArrayIndex++;
-        chooseQuestion();
-        populateQuiz();
-        console.log(questionsArrayIndex);
-    }
-
-    if (questionsArrayIndex == 5){
-        finalQuestion();
-    }
-}
-
-$(".buttons").on('click', function () {
-    console.log($(this));
-    if ($(this)[0].innerText == myArray[0][1] ||
-        $(this)[0].innerText == myArray[3][2] ||
-        $(this)[0].innerText == myArray[1][3] ||
-        $(this)[0].innerText == myArray[2][4] ||
-        $(this)[0].innerText == myArray[4][4]) {
-        console.log($(this)[0].innerText + " right")
-        rightChoice();
-        
-        userScore += 1;
-
-    } else if ($(this)[0].innerText == myArray[0][2] || $(this)[0].innerText == myArray[0][3] || $(this)[0].innerText == myArray[0][4]) {
-        console.log($(this)[0].innerText + " wrong")
-        wrongChoice();
-        
-
-    } else if ($(this)[0].innerText == myArray[1][1] || $(this)[0].innerText == myArray[1][2] || $(this)[0].innerText == myArray[1][4]){
-        console.log($(this)[0].innerText + " wrong")
-        wrongChoice();
-        
-    } else if ($(this)[0].innerText == myArray[2][1] || $(this)[0].innerText == myArray[2][2] || $(this)[0].innerText == myArray[2][3]){
-        console.log($(this)[0].innerText + " wrong")
-        wrongChoice();
-        
-    } else if ($(this)[0].innerText == myArray[3][1] || $(this)[0].innerText == myArray[3][3] || $(this)[0].innerText == myArray[3][4]){     
-        console.log($(this)[0].innerText + " wrong")
-        wrongChoice();
-        
-    } else if ($(this)[0].innerText == myArray[4][1] || $(this)[0].innerText == myArray[4][2] || $(this)[0].innerText == myArray[4][3]){
-        console.log($(this)[0].innerText + " wrong")
-        wrongChoice();
-        
-    }
-
-})
-
-function timerStart() {
-    seconds = setInterval(function () {
-
-        timerSec--;
-        countdown.textContent = timerSec;
-
-        if (timerSec === 0 || timerSec < 1) {
-            clearInterval(seconds);
-            alert("You have run out of time. Game over.");
-            finalQuestion();
-        }
-
-    }, 1000);
-}
-
-function rightChoice() {
-    correctAns.innerText = "Correct";
-    nextQuestion();
-}
-
-function wrongChoice() {
-    wrongAns.innerText = "Wrong";
-    nextQuestion();  
-    timerSec -= 10;
-    console.log(timerSec);
-}
-
-function finalQuestion() {
-    clearInterval(seconds);
-    $("#quesBody").text("All Done!");
-    document.querySelector(".card-body").append(`Your final score is ${userScore+1}`);
-    var para = document.createElement("p");
-    para.innerText = "Enter your initials: ";
-    document.querySelector(".card-body").appendChild(para);
-    var input = document.createElement("input");
-    input.className = "inputInit mx-auto text-center";
-    document.querySelector(".card-body").appendChild(input);
-    var button = document.createElement("button");
-    button.className = "submit  allButtons mx-auto text-center"
-    button.innerText = "Submit";
-    document.querySelector(".card-body").appendChild(button);
-    document.querySelector(".button-group").remove();
-
-    $(".submit").on('click', function (){
-        submit();
+    userChoices.forEach(function (newItem) {
+        var listItem = document.createElement("li");
+        listItem.textContent = newItem;
+        questionsDiv.appendChild(ulCreate);
+        ulCreate.appendChild(listItem);
+        listItem.addEventListener("click", (compare));
     })
 }
+function compare(event) {
+    var element = event.target;
 
-var saveInput = document.querySelector(".inputInit");
+    if (element.matches("li")) {
 
-function submit() {
-    event.preventDefault();
-    saveInput;
-    if (localStorage !== null) }
+        var createDiv = document.createElement("div");
+        createDiv.setAttribute("id", "createDiv");
+        if (element.textContent == questions[questionIndex].answer) {
+            score++;
+            createDiv.textContent = "Correct! The answer is:  " + questions[questionIndex].answer;
+        } else {
+            secondsLeft = secondsLeft - penalty;
+            createDiv.textContent = "Wrong! The correct answer is:  " + questions[questionIndex].answer;
+        }
 
-    const userObj = {
-        initials: document.querySelector('.inputInit').value,
-        score: userScore
+    }
+    questionIndex++;
+
+    if (questionIndex >= questions.length) {
+        allDone();
+        createDiv.textContent = "End of quiz!" + " " + "You got  " + score + "/" + questions.length + " Correct!";
+    } else {
+        render(questionIndex);
+    }
+    questionsDiv.appendChild(createDiv);
+
+}
+function allDone() {
+    questionsDiv.innerHTML = "";
+    currentTime.innerHTML = "";
+    var createH1 = document.createElement("h1");
+    createH1.setAttribute("id", "createH1");
+    createH1.textContent = "All Done!"
+
+    questionsDiv.appendChild(createH1);
+
+    var createP = document.createElement("p");
+    createP.setAttribute("id", "createP");
+
+    questionsDiv.appendChild(createP);
+
+    if (secondsLeft >= 0) {
+        var timeRemaining = secondsLeft;
+        var createP2 = document.createElement("p");
+        clearInterval(holdInterval);
+        createP.textContent = "Your final score is: " + timeRemaining;
+
+        questionsDiv.appendChild(createP2);
     }
 
-    info = JSON.parse(localStorage.getItem("score")) || [];
+    var createLabel = document.createElement("label");
+    createLabel.setAttribute("id", "createLabel");
+    createLabel.textContent = "Enter your initials: ";
 
-    info.push(userObj);
+    questionsDiv.appendChild(createLabel);
 
-    localStorage.setItem("score", JSON.stringify(info));
+    var createInput = document.createElement("input");
+    createInput.setAttribute("type", "text");
+    createInput.setAttribute("id", "initials");
+    createInput.textContent = "";
 
-    window.location = viewHighScores;
-    console.log(localStorage.getItem("initials"));
+    questionsDiv.appendChild(createInput);
 
-    console.log(info.initials);
+    var createSubmit = document.createElement("button");
+    createSubmit.setAttribute("type", "submit");
+    createSubmit.setAttribute("id", "Submit");
+    createSubmit.textContent = "Submit";
 
-    console.log(info);
+    questionsDiv.appendChild(createSubmit);
+    createSubmit.addEventListener("click", function () {
+        var initials = createInput.value;
 
-var append = document.querySelector("body > div.card > div > p");
-console.log(append);
+        if (initials === null) {
 
-for (var i = 0; i < info.length; i++) {
-    var div = document.createElement('div');
-    div.textContent = `${[i+1]} ${info[i].initials} - ${info[i].score}`;
-    append.appendChild(div);
-    console.log(info[i]);
+            console.log("No value entered!");
+
+        } else {
+            var finalScore = {
+                initials: initials,
+                score: timeRemaining
+            }
+            console.log(finalScore);
+            var allScores = localStorage.getItem("allScores");
+            if (allScores === null) {
+                allScores = [];
+            } else {
+                allScores = JSON.parse(allScores);
+            }
+            allScores.push(finalScore);
+            var newScore = JSON.stringify(allScores);
+            localStorage.setItem("allScores", newScore);
+            window.location.replace("./highScores.html");
+        }
+    });
+
 }
 
-function goBack() {
-    window.location = "./index.html";
-}
+var highScore = document.querySelector("#highScore");
+var clear = document.querySelector("#clear");
+var goBack = document.querySelector("#goBack");
 
-function clearScores() {
-    window.location = "./index.html";
+clear.addEventListener("click", function () {
     localStorage.clear();
-    console.log('cleared');    
-}
+    location.reload();
+});
+var allScores = localStorage.getItem("allScores");
+allScores = JSON.parse(allScores);
 
-goBackButton.addEventListener("click", goBack);
-clearStorage.addEventListener("click", clearScores);
+if (allScores !== null) {
+
+    for (var i = 0; i < allScores.length; i++) {
+
+        var createLi = document.createElement("li");
+        createLi.textContent = allScores[i].initials + " " + allScores[i].score;
+        highScore.appendChild(createLi);
+  }
+}
+goBack.addEventListener("click", function () {
+    window.location.replace("./highscores.html");
+});
