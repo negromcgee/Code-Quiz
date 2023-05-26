@@ -25,6 +25,17 @@ WHEN the game is over
 THEN I can save my initials and my score
 
 
+## Links
+
+```
+
+Link to deployed webpage: 
+
+
+Link to GitHub repository: https://github.com/negromcgee/Code-Quiz
+
+
+
 ## Demo
 
 ```
