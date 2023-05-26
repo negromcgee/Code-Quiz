@@ -5,9 +5,62 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code Quiz</title>
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Labrada:wght@300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="./assets/script.js">
   </head>
+
   <body>
+    <div>
+      <a href="./highscores.html" class="anchor">View Highscores</a>
+      <p class="time">Time:</p>
+      <p class="countdown">0</p>
+    </div>
+  
+  
+  <div class="Card-group  ">
+    <div class="card card-columns"  id="startDiv"> 
+      <div class="card-body  mx-auto" id="removeElem">      
+        <h5 class="card-title mx-auto text-center">JavaScript Quiz</h5>      
+        <p class="card-text text-center">Try to answer the JavaScript questions within the time limit! </p>
+          <button aria-label="Start Quiz" id="startButton" class="startButton allButtons  mx-auto" onclick="startQuiz()">Start Quiz
+            <i class="start" aria-hidden="true"></i>
+          </button>
+      </div>
+    </div>
+      <div class="card  " id="questionsDiv">
+        <div class="card-body  mx-auto text-center  ">      
+          <h5 class="card-title" id="quesTittle"></h5>      
+          <p class="card-text card-subtitle text-center" id="quesBody">Question</p>
+          <div class="button-group">
+            <button aria-label="ans1" id="ans1" class="buttons allButtons mx-auto">1
+              <i class="start" aria-hidden="true"></i>
+            </button>
+            <button aria-label="ans2" id="ans2" class="buttons allButtons mx-auto">2
+              <i class="start" aria-hidden="true"></i>
+            </button>
+            <button aria-label="ans3" id="ans3" class="buttons allButtons mx-auto">3
+              <i class="start" aria-hidden="true"></i>
+            </button>
+            <button aria-label="ans4" id="ans4" class="buttons allButtons mx-auto">4
+              <i class="start" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>    
+    </div>
     
+      <footer class="card-footer" id="footerDiv">
+        <hr class="horRow">
+          <p class="correct" id="correctAns"></p>
+          <p class="wrong" id="wrongAns"></p>
+      </footer>
+    
+  </div>
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.0.min.js"
+  integrity="sha256-spTpc4lvj4dOkKjrGokIrHkJgNA0xMS98Pw9N7ir9oI=" crossorigin="anonymous"></script>
+  <script src="./assets/script.js"></script>
   </body>
   </html>
